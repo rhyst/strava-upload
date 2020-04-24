@@ -35,8 +35,16 @@ self.addEventListener("activate", function (event) {
   );
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", async (event) => {
   console.log("Fetch event for ", event.request.url);
+
+  if (event.request.method === "POST") {
+    const formData = await event.request.formData();
+    console.log(formData);
+    return;
+  }
+
+  // GET
   event.respondWith(
     caches
       .match(event.request)

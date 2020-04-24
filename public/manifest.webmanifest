@@ -17,5 +17,19 @@
   "background_color": "#3367D6",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#3367D6"
+  "theme_color": "#3367D6",
+  "share_target": {
+    "action": "/post",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "track",
+          "accept": ["application/gpx+xml", ".gpx"]
+        },
+        { "name": "file", "accept": ["application/octet-stream", ".gpx"] }
+      ]
+    }
+  }
 }
