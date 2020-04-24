@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <style>
+      form {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+      }
+      form * {
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <input name="name" placeholder="Name" />
+      <input name="description" placeholder="Description" />
+      <input name="trainer" value="" type="hidden" />
+      <input name="commute" value="" type="hidden" />
+      <input name="data_type" value="gpx" type="hidden" />
+      <input type="file" name="file" />
+      <button type="submit">Upload</button>
+    </form>
+  </body>
+</html>

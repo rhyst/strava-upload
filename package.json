@@ -1,0 +1,19 @@
+{
+  "name": "strava-upload",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cookie-encrypter": "^1.0.1",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "form-data": "^3.0.0",
+    "multer": "^1.4.2"
+  }
+}
