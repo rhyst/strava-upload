@@ -13,22 +13,24 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/?source=pwa",
+  "start_url": "/",
   "background_color": "#3367D6",
   "display": "standalone",
   "scope": "/",
   "theme_color": "#3367D6",
   "share_target": {
-    "action": "/post",
+    "action": "index.html",
     "method": "POST",
     "enctype": "multipart/form-data",
     "params": {
+      "title": "name",
+      "text": "description",
+      "url": "link",
       "files": [
         {
-          "name": "track",
-          "accept": ["application/gpx+xml", ".gpx"]
-        },
-        { "name": "file", "accept": ["application/octet-stream", ".gpx"] }
+          "name": "file",
+          "accept": ["*/*"]
+        }
       ]
     }
   }
