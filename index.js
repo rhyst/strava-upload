@@ -8,11 +8,12 @@ var fs = require("fs");
 
 const app = express();
 
+const isDev = process.env.IS_DEV;
 const port = process.env.PORT || 3000;
-const client_id = process.env.CLIENT_ID;
-const client_secret = process.env.CLIENT_SECRET;
-const secretKey = process.env.SECRET_KEY;
-const appUrl = process.env.APP_URL;
+const client_id = process.env.CLIENT_ID || "test";
+const client_secret = process.env.CLIENT_SECRET || "test";
+const secretKey = process.env.SECRET_KEY || "12345678901234567890123456789012";
+const appUrl = process.env.APP_URL || "http://localhost";
 
 const AUTH_URL = `http://www.strava.com/oauth/authorize?client_id=${client_id}&response_type=code&redirect_uri=${appUrl}/exchange_token&approval_prompt=auto&scope=activity:write`;
 
@@ -20,12 +21,19 @@ const setAuthCookie = (authData, res) => {
   const cookieParams = {
     httpOnly: true,
     signed: true,
-    maxAge: 300000,
+    maxAge: 2592000,
   };
   res.cookie("auth", authData, cookieParams);
 };
 
 const handleAuth = async (req, res) => {
+  if (isDev) {
+    setAuthCookie(
+      { access_token: "test", refresh_token: "test", expires_at: 999999999999 },
+      res
+    );
+    return true;
+  }
   if (req.signedCookies.auth) {
     if (Date.now() > req.signedCookies.auth.expires_at) {
       console.log("Authorisation valid");
@@ -61,7 +69,7 @@ app.get("/", async (req, res, next) => {
   if (!isAuthed) {
     return res.redirect(AUTH_URL);
   }
-  console.log(req.signedCookies.auth.access_token);
+  // console.log(req.signedCookies.auth.access_token);
   next();
 });
 app.use("/", express.static("public"));

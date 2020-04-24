@@ -11,6 +11,13 @@
       }
     </style>
     <link rel="manifest" href="/manifest.webmanifest" />
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/service-worker.js");
+        });
+      }
+    </script>
   </head>
   <body>
     <form action="/upload" method="POST" enctype="multipart/form-data">
