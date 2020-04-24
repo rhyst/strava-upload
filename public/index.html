@@ -1,16 +1,9 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      form {
-        width: 300px;
-        display: flex;
-        flex-direction: column;
-      }
-      form * {
-        margin: 5px;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="/bulma-prefers-dark.css" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <script>
       if ("serviceWorker" in navigator) {
@@ -21,14 +14,59 @@
     </script>
   </head>
   <body>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-      <input name="name" placeholder="Name" />
-      <input name="description" placeholder="Description" />
-      <input name="trainer" value="" type="hidden" />
-      <input name="commute" value="" type="hidden" />
-      <input name="data_type" value="gpx" type="hidden" />
-      <input type="file" name="file" />
-      <button type="submit">Upload</button>
-    </form>
+    <section class="section">
+      <div class="container content">
+        <h1>Strava Upload</h1>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+          <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+              <input class="input" type="text" name="name" placeholder="Name" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Description</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                name="description"
+                placeholder="Description"
+              />
+            </div>
+          </div>
+          <input name="trainer" value="" type="hidden" />
+          <input name="commute" value="" type="hidden" />
+          <input name="data_type" value="gpx" type="hidden" />
+          <div class="file field is-fullwidth">
+            <label class="file-label">
+              <input class="file-input" type="file" name="file" />
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Choose a file…
+                </span>
+              </span>
+              <span class="file-name is-hidden"> </span>
+            </label>
+          </div>
+          <button class="button is-primary is-fullwidth" type="submit">
+            Upload
+          </button>
+        </form>
+      </div>
+    </section>
+    <script>
+      const file = document.querySelector(".file");
+      const input = document.querySelector('input[name="file"');
+      const name = document.querySelector(".file-name");
+      input.addEventListener("change", (e) => {
+        name.innerText = e.target.value;
+        name.classList.remove("is-hidden");
+        file.classList.add("has-name");
+      });
+    </script>
   </body>
 </html>

@@ -5,6 +5,7 @@ const filesToCache = [
   "icon-512.png",
   "icon-192.png",
   "manifest.webmanifest",
+  "bulma.css",
 ];
 const staticCacheName = "strava-upload-cache-v1";
 
