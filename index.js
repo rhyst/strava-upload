@@ -15,7 +15,7 @@ const client_secret = process.env.CLIENT_SECRET || "test";
 const secretKey = process.env.SECRET_KEY || "12345678901234567890123456789012";
 const appUrl = process.env.APP_URL || "http://localhost";
 
-const AUTH_URL = `http://www.strava.com/oauth/authorize?client_id=${client_id}&response_type=code&redirect_uri=${appUrl}/exchange_token&approval_prompt=auto&scope=activity:write`;
+const AUTH_URL = `https://www.strava.com/oauth/authorize?client_id=${client_id}&response_type=code&redirect_uri=${appUrl}/exchange_token&approval_prompt=auto&scope=activity:write`;
 
 const setAuthCookie = (authData, res) => {
   const cookieParams = {
@@ -64,15 +64,16 @@ const handleAuth = async (req, res) => {
 app.use(cookieParser(secretKey));
 app.use(cookieEncrypter(secretKey));
 
-app.get("/", async (req, res, next) => {
-  const isAuthed = await handleAuth(req, res);
-  if (!isAuthed) {
-    return res.redirect(AUTH_URL);
-  }
-  // console.log(req.signedCookies.auth.access_token);
-  next();
-});
 app.use("/", express.static("public"));
+
+app.get("/auth", async (req, res) => {
+  const authed = await handleAuth(req, res);
+  if (authed) {
+    return res.status(200).send({ until: req.signedCookies.auth.expires_at });
+  } else {
+    return res.status(401).send({ error: true });
+  }
+});
 
 app.get("/exchange_token", async (req, res) => {
   const authResponse = await axios.post(
@@ -89,16 +90,15 @@ app.get("/exchange_token", async (req, res) => {
   );
 
   setAuthCookie(authResponse.data, res);
-  res.redirect("/");
+  res.redirect("/pwa.html");
 });
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.post("/upload", upload.single("file"), async (req, res, next) => {
-  const isAuthed = handleAuth(req, res);
-  if (!isAuthed) {
-    return res.redirect(AUTH_URL);
+  if (!req.body.name || !req.file) {
+    return res.status(400).send({ error: "Name and file are required" });
   }
 
   const form = new FormData();
@@ -120,16 +120,16 @@ app.post("/upload", upload.single("file"), async (req, res, next) => {
         },
       }
     );
+    return res.send(response.data);
   } catch (e) {
     if (e.response && e.response.data) {
       console.log(e.response.data);
+      return res.send(e.response.data);
     } else {
       console.log(e);
+      return res.send({ error: e });
     }
   }
-  return res.redirect("/");
 });
 
-app.listen(port, () =>
-  console.log(`App listening at http://${appUrl}:${port}`)
-);
+app.listen(port, () => console.log(`App listening at ${appUrl}:${port}`));

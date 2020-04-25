@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="/bulma-prefers-dark.css" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/service-worker.js");
+        });
+
+        const broadcast = new BroadcastChannel("channel");
+        broadcast.postMessage(null);
+        broadcast.onmessage = (event) => {};
+      }
+    </script>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container content">
+        <h1>Strava Upload</h1>
+        <p>
+          Strava Upload needs permission to create activities for you. Click the
+          link below to provide permission.
+        </p>
+        <p>It will redirect to the Strava website.</p>
+        <p>
+          <a href="">Authorise Strava Upload</a>
+        </p>
+      </div>
+      <script>
+        document.querySelector(
+          "a"
+        ).href = `https://www.strava.com/oauth/authorize?client_id=46560&response_type=code&redirect_uri=${window.location.protocol}//${window.location.host}/exchange_token&approval_prompt=auto&scope=activity:write`;
+      </script>
+    </section>
+  </body>
+</html>

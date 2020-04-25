@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="/bulma-prefers-dark.css" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/service-worker.js");
+        });
+        const broadcast = new BroadcastChannel("channel");
+        broadcast.postMessage(null);
+        broadcast.onmessage = (event) => {
+          if (event.data) {
+            window.location = "/pwa-upload.html";
+          }
+        };
+      }
+    </script>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container content">
+        <h1>Strava Upload</h1>
+        <div class="notification is-success is-hidden">
+          The GPX file was succesfully uploaded.
+        </div>
+        <p>
+          Share a GPX file from another app to upload it to Strava.
+        </p>
+      </div>
+    </section>
+    <script>
+      const notif = document.querySelector(".notification");
+      if (window.location.search.includes("success")) {
+        notif.classList.remove("is-hidden");
+      }
+    </script>
+  </body>
+</html>

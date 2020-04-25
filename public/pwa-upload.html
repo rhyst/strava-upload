@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="/bulma-prefers-dark.css" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/service-worker.js");
+        });
+
+        const broadcast = new BroadcastChannel("channel");
+        broadcast.postMessage(null);
+        broadcast.onmessage = (event) => {
+          const filename = document.querySelector(".filename");
+          if (event.data) {
+            filename.value = event.data;
+          } else {
+            window.location = "/pwa.html";
+          }
+        };
+      }
+    </script>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container content">
+        <h1>Strava Upload</h1>
+        <div class="notification is-danger is-hidden"></div>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+          <input name="" value="false" type="hidden" />
+          <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+              <input class="input" type="text" name="name" placeholder="Name" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Description</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                name="description"
+                placeholder="Description"
+              />
+            </div>
+          </div>
+          <input name="trainer" value="" type="hidden" />
+          <input name="commute" value="" type="hidden" />
+          <input name="data_type" value="gpx" type="hidden" />
+          <div class="field">
+            <label class="label">File</label>
+            <input
+              class="input filename"
+              type="text"
+              value="Filename"
+              readonly
+            />
+          </div>
+          <button class="button is-primary is-fullwidth" type="submit">
+            Upload
+          </button>
+        </form>
+      </div>
+    </section>
+    <script>
+      const form = document.querySelector("form");
+      const notif = document.querySelector(".notification");
+
+      // Form Post
+      const post = async (formData) => {
+        const response = await fetch("/upload", {
+          credentials: "same-origin",
+          body: formData,
+          method: "POST",
+        });
+        const data = await response.json();
+        if (data.error) {
+          notif.classList.remove("is-hidden");
+          notif.innerHTML = `<p>The upload failed with the following error:<p><p>${data.error}</p>`;
+        } else {
+          window.location = "/pwa.html?success";
+        }
+      };
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        post(new FormData(form));
+      });
+    </script>
+  </body>
+</html>
