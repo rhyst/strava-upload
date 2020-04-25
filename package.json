@@ -1,7 +1,7 @@
 {
   "name": "strava-upload",
   "version": "1.0.0",
-  "description": "",
+  "description": "An installable web app to serve as a share target for GPX files on Android.",
   "main": "server.js",
   "scripts": {
     "start": "node index.js",

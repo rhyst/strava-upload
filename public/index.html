@@ -10,6 +10,27 @@
         window.addEventListener("load", function () {
           navigator.serviceWorker.register("/service-worker.js");
         });
+
+        let deferredPrompt;
+
+        window.addEventListener("beforeinstallprompt", (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          const install = document.querySelector(".install");
+          const installed = document.querySelector(".installed");
+          const button = document.querySelector(".install-button");
+          install.classList.remove("is-hidden");
+          installed.classList.add("is-hidden");
+          button.addEventListener("click", () => {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === "accepted") {
+                install.classList.add("is-hidden");
+                installed.classList.remove("is-hidden");
+              }
+            });
+          });
+        });
       }
     </script>
   </head>
@@ -17,56 +38,26 @@
     <section class="section">
       <div class="container content">
         <h1>Strava Upload</h1>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-          <div class="field">
-            <label class="label">Name</label>
-            <div class="control">
-              <input class="input" type="text" name="name" placeholder="Name" />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Description</label>
-            <div class="control">
-              <input
-                class="input"
-                type="text"
-                name="description"
-                placeholder="Description"
-              />
-            </div>
-          </div>
-          <input name="trainer" value="" type="hidden" />
-          <input name="commute" value="" type="hidden" />
-          <input name="data_type" value="gpx" type="hidden" />
-          <div class="file field is-fullwidth">
-            <label class="file-label">
-              <input class="file-input" type="file" name="file" />
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload"></i>
-                </span>
-                <span class="file-label">
-                  Choose a file…
-                </span>
-              </span>
-              <span class="file-name is-hidden"> </span>
-            </label>
-          </div>
-          <button class="button is-primary is-fullwidth" type="submit">
-            Upload
+        <p>
+          Strava Upload allows you to easily create a Strava activity from a GPX
+          file from your Android device, which is something you can't do via the
+          Strava app.
+        </p>
+        <div class="is-hidden install">
+          <p>
+            It must be installed as an app on your device first, then you can
+            create activities by using the Android share menu to share a GPX
+            file from any other app.
+          </p>
+          <button class="button is-primary is-fullwidth install-button">
+            Install
           </button>
-        </form>
+        </div>
+        <p class="installed">
+          It looks like you've installed the app. Open it from your home screen
+          or app drawer.
+        </p>
       </div>
     </section>
-    <script>
-      const file = document.querySelector(".file");
-      const input = document.querySelector('input[name="file"');
-      const name = document.querySelector(".file-name");
-      input.addEventListener("change", (e) => {
-        name.innerText = e.target.value;
-        name.classList.remove("is-hidden");
-        file.classList.add("has-name");
-      });
-    </script>
   </body>
 </html>

@@ -13,13 +13,13 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
+  "start_url": "/pwa.html",
   "background_color": "#3367D6",
   "display": "standalone",
   "scope": "/",
   "theme_color": "#3367D6",
   "share_target": {
-    "action": "index.html",
+    "action": "/pwa-upload.html",
     "method": "POST",
     "enctype": "multipart/form-data",
     "params": {
@@ -28,7 +28,7 @@
       "url": "link",
       "files": [
         {
-          "name": "file",
+          "name": "shared",
           "accept": ["*/*"]
         }
       ]
