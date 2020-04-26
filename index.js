@@ -29,7 +29,7 @@ const setAuthCookie = (authData, res) => {
 const handleAuth = async (req, res) => {
   if (isDev) {
     setAuthCookie(
-      { access_token: "test", refresh_token: "test", expires_at: 2592000000 },
+      { access_token: "test", refresh_token: "test", maxAge: 2592000000 },
       res
     );
     return true;
@@ -61,7 +61,7 @@ const handleAuth = async (req, res) => {
   return false;
 };
 
-app.use(cookieParser(secretKey));
+app.use(cookieParser(secretKey, { maxAge: 2592000000 }));
 app.use(cookieEncrypter(secretKey));
 
 app.use("/", express.static("public"));
