@@ -21,7 +21,7 @@ const setAuthCookie = (authData, res) => {
   const cookieParams = {
     httpOnly: true,
     signed: true,
-    maxAge: 2592000,
+    maxAge: 2592000000,
   };
   res.cookie("auth", authData, cookieParams);
 };
@@ -29,7 +29,7 @@ const setAuthCookie = (authData, res) => {
 const handleAuth = async (req, res) => {
   if (isDev) {
     setAuthCookie(
-      { access_token: "test", refresh_token: "test", expires_at: 999999999999 },
+      { access_token: "test", refresh_token: "test", expires_at: 2592000000 },
       res
     );
     return true;
