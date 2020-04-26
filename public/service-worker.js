@@ -88,7 +88,7 @@ self.addEventListener("fetch", async (event) => {
       (async () => {
         // Check auth on new pages
         if (event.request.url.match(/.*\.html.*/)) {
-          if (authedUntil < Date.now()) {
+          if (authedUntil < Date.now() / 1000) {
             console.log("Auth expired");
             const authed = await (await fetch("/auth")).json();
             if (authed.error) {
