@@ -35,7 +35,7 @@ const handleAuth = async (req, res) => {
     return true;
   }
   if (req.signedCookies.auth) {
-    if (Date.now() > req.signedCookies.auth.expires_at) {
+    if (Date.now() < req.signedCookies.auth.expires_at * 1000) {
       console.log("Authorisation valid");
       return true;
     } else {
