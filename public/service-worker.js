@@ -41,7 +41,7 @@ self.addEventListener("activate", function (event) {
 
 const broadcast = new BroadcastChannel("channel");
 let shared = null;
-let authedUntil = Date.now();
+let authedUntil = Date.now() / 1000;
 
 broadcast.onmessage = () => {
   broadcast.postMessage(shared && shared.name);
